@@ -1,30 +1,23 @@
 import React, { Component } from 'react';
 import ListContacts from './ListContacts';
+import * as ContactsAPI from  './utils/ContactsAPI';
 
 class App extends Component {
   // definindo o estado inicial da aplicação
   // essa sintaxe só é possível graças ao processo de transpiler do babel
   state = {
-    contacts: [
-      {
-        "id": "karen",
-        "name": "Karen Isgrigg",
-        "handle": "karen_isgrigg",
-        "avatarURL": "http://localhost:5001/karen.jpg"
-      },
-      {
-        "id": "richard",
-        "name": "Richard Kalehoff",
-        "handle": "richardkalehoff",
-        "avatarURL": "http://localhost:5001/richard.jpg"
-      },
-      {
-        "id": "tyler",
-        "name": "Tyler McGinnis",
-        "handle": "tylermcginnis",
-        "avatarURL": "http://localhost:5001/tyler.jpg"
-      }
-     ]
+    contacts: []
+  }
+
+  // uma vez que o componente é montado, chama o método de recuperar os contatos
+  // esse é um dos métodos de ciclo de vida dos componentes do React
+  componentDidMount() {
+    ContactsAPI.getAll()
+      .then((contacts) => {
+          this.setState(() => ({
+            contacts
+          }))
+      })
   }
 
   // o estado sempre é alterado no componente que detem o dado
@@ -35,6 +28,7 @@ class App extends Component {
         return c.id !== contact.id
       })
     }))
+    ContactsAPI.remove(contact)
   }
 
   render() {
