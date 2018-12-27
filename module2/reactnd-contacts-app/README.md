@@ -12,6 +12,9 @@ LifeCycle
 * https://medium.com/react-ecosystem/react-components-lifecycle-ce09239010df
 * http://lucybain.com/blog/2018/react-js-pure-component/
 
+Routes
+* https://tylermcginnis.com/react-router-nested-routes/
+
 # Contacts Project
 
 This repo is a code-along with the first project in the [React Nanodegree program](https://www.udacity.com/course/react-nanodegree--nd019).

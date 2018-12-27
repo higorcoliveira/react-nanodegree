@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class ListContacts extends Component {
     static propTypes = {
@@ -20,17 +21,17 @@ class ListContacts extends Component {
     clearQuery = () => {
         this.updateQuery('')
     }
-    
+
     // esse componente é chamado de componente controlado pois ele mesmo gerencia seu estado
-    render () {
+    render() {
         const { query } = this.state
         const { contacts, onDeleteContact } = this.props
-    
+
         // filtra os contatos baseados no estado do atributo query
         const showingContacts = query === ''
-          ? contacts
-          : contacts.filter((c) => (
-              c.name.toLowerCase().includes(query.toLowerCase())
+            ? contacts
+            : contacts.filter((c) => (
+                c.name.toLowerCase().includes(query.toLowerCase())
             ))
 
         return (
@@ -43,6 +44,10 @@ class ListContacts extends Component {
                         value={query}
                         onChange={(event) => this.updateQuery(event.target.value)}
                     />
+                    <Link
+                        to='/create'
+                        className='add-contact'
+                    >Add Contact</Link>
                 </div>
                 {showingContacts.length !== contacts.length && (
                     <div className='showing-contacts'>
@@ -55,7 +60,7 @@ class ListContacts extends Component {
                         <li key={contact.id} className='contact-list-item'>
                             <div className='contact-avatar' style={{
                                 backgroundImage: `url(${contact.avatarURL})`
-                                }}>
+                            }}>
                             </div>
                             <div className='contact-details'>
                                 <p>{contact.name}</p>
@@ -64,7 +69,7 @@ class ListContacts extends Component {
                             <button className='contact-remove'
                                 onClick={() => onDeleteContact(contact)}>
                                 Remove
-                            </button>            
+                            </button>
                         </li>
                     ))}
                 </ol>
