@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import ColumnList from './ColumnList'
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
 
 class App extends Component {
   // DEPRECATED
@@ -11,40 +13,48 @@ class App extends Component {
   // }
   constructor() {
     super();
-    const tasks = JSON.parse(window.localStorage.getItem('toDoListTasks') || '[]')
-    this.state = { tasks }
+    // agora os dados estão vindo do servidor via graphql
+    // const tasks = JSON.parse(window.localStorage.getItem('toDoListTasks') || '[]')
+    this.state = { tasks: [] }
   }
 
-  updateLocalStorage = tasks => {
-    const stringfied = JSON.stringify(tasks)
-    window.localStorage.setItem('toDoListTasks', stringfied)
-  }
-
-  updateAndSave = tasks => {
-    this.updateLocalStorage(tasks)
-    this.setState({ tasks })
+  componentWillReceiveProps({ getAllTasks }) {
+    const { allTasks } = getAllTasks
+    this.setState({
+      tasks: allTasks
+    })
   }
 
   addTask = (e) => {
     e.preventDefault();
-    let { tasks } = this.state
     const value = e.target.querySelector('input').value
-    const newTask = {
-      id: tasks.length + 1,
-      description: value,
-      status: 'To Do'
-    }
-    tasks = tasks.concat(newTask)
-    this.updateAndSave(tasks)    
+    this.props.createTask({
+      variables: {
+        status: 'To Do',
+        title: value
+      }
+    }).then(res => {
+      this.props.getAllTasks.refetch() // traz novamente os dados do servidor após inserção
+    })    
   }
 
   updateTask = (target, task) => {
-    let { tasks } = this.state
-    tasks = tasks.filter(t => t.id !== task.id).concat({
-      ...task, 
-      status: target.checked ? 'Done' : 'To Do'
+    const id = task.id
+    const status = target.checked ? 'Done' : 'To Do'
+    this.props.updateTask({
+      variables: { id, status }
+    }).then(res => {
+      this.props.getAllTasks.refetch()
     })
-    this.updateAndSave(tasks)
+  }
+
+  deleteTask = (e, id) => {
+    e.preventDefault();
+    this.props.deleteTask({
+      variables: { id }
+    }).then(res => {
+      this.props.getAllTasks.refetch()
+    })    
   }
 
   render() {
@@ -53,6 +63,7 @@ class App extends Component {
       { title: 'To Do', tasks },
       { title: 'Done', tasks },
     ]
+    const { loading } = this.props.getAllTasks
     return (
       <div className="App">
         <header className="App-header">
@@ -61,15 +72,17 @@ class App extends Component {
         </header>
         <div className="App-container">
           <div className="app-lists">
-            {columns.map(column => (
+            {!loading && columns.map(column => (
               <ColumnList
                 key={column.title}
                 title={column.title}
                 tasks={column.tasks}
                 addTask={this.addTask}
                 updateTask={this.updateTask}
+                deleteTask={this.deleteTask}
               />
             ))}
+            {loading && <div>Loading...</div>}
           </div>
         </div>
       </div>
@@ -77,4 +90,47 @@ class App extends Component {
   }
 }
 
-export default App;
+// métodos que vão no servidor graphql
+const GetAllTasks = gql`
+  query getAllTasks {
+    allTasks {
+      id
+      status
+      title
+    }
+  }
+`
+
+const CreateTask = gql`
+  mutation createTask ($status: String, $title: String!) {
+    createTask(status: $status, title: $title) {
+      id
+      status
+      title
+    }
+  }
+`
+
+const UpdateTask = gql`
+  mutation updateTask ($id: ID!, $status: String) {
+    updateTask(id: $id, status: $status) {
+      id
+      status
+      title
+    }
+  }
+`
+
+const DeleteTask = gql`
+  mutation deleteTask ($id: ID!) {
+    deleteTask(id: $id) {
+      id
+    }
+  }
+`
+// high order component
+export default compose(
+  graphql(GetAllTasks, { name: 'getAllTasks'}), 
+  graphql(CreateTask,  { name: 'createTask'}), 
+  graphql(UpdateTask,  { name: 'updateTask'}),
+  graphql(DeleteTask,  { name: 'deleteTask'}))(App)

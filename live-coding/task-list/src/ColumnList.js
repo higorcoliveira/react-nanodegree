@@ -2,7 +2,7 @@ import React from 'react'
 import './ColumnList.css'
 import If from './If'
 
-const ColumnList = ({ title, tasks, updateTask, addTask }) => {
+const ColumnList = ({ title, tasks, updateTask, addTask, deleteTask }) => {
     const currentTasks = tasks.filter(task => task.status === title)
     return (
         <div className="column-list">
@@ -13,14 +13,15 @@ const ColumnList = ({ title, tasks, updateTask, addTask }) => {
                     <button type="submit">Create Task</button>
                 </form>
             </If>
-            <ul>
+            <ul className="list-items">
                 {currentTasks.map(task => (
                     <li key={task.id}>
                         <input type="checkbox" 
                             onChange={e => updateTask(e.target, task)} 
                             checked={title === 'Done'}
                         />
-                        <span>{task.description}</span>
+                        <span>{task.title}</span>
+                        <button onClick={(e) => deleteTask(e, task.id)}>Remove</button>
                     </li>
                 ))}
             </ul>
