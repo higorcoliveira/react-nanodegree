@@ -289,6 +289,8 @@
             }
         }
 
+        // O método connect recebe um componente de apresentação
+        // e retorna um componente conectado, com acesso ao store
         const ConnectedGoals = ReactRedux.connect((state) => ({
             goals: state.goals
         }))(Goals)
