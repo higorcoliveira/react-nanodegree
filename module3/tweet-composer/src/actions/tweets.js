@@ -1,8 +1,35 @@
-export const RECEIVE_TWEETS = 'RECEIVE_TWEETS'
+import { saveLikeToggle } from '../utils/api'
 
-export function receiveTweets (tweets) {
+export const RECEIVE_TWEETS = 'RECEIVE_TWEETS'
+export const TOGGLE_TWEET = 'TOGGLE_TWEET'
+
+export function receiveTweets(tweets) {
   return {
     type: RECEIVE_TWEETS,
     tweets,
+  }
+}
+
+function toggleTweet({ id, authedUser, hasLiked }) {
+  return {
+    type: TOGGLE_TWEET,
+    id,
+    authedUser,
+    hasLiked
+  }
+}
+
+// atualização otimista, altera o estado antes do backend
+// desfaz o estado em caso de erro
+export function handleToggleTweet(info) {
+  return (dispatch) => {
+    dispatch(toggleTweet(info))
+
+    return saveLikeToggle(info)
+      .catch((e) => {
+        console.warn('Error in handleToggleTweet: ', e)
+        dispatch(toggleTweet(info))
+        alert('The was an error liking the tweet. Try again.')
+      })
   }
 }

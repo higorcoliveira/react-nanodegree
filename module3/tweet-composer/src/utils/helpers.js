@@ -1,3 +1,5 @@
+export const TWEET_TEXT_LIMIT = 240
+
 export function formatDate (timestamp) {
   const d = new Date(timestamp)
   const time = d.toLocaleTimeString('en-US')

@@ -1,13 +1,22 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { formatTweet, formatDate } from '../utils/helpers'
-import { TiArrowBackOutline, TiHeartOutline, TiHeartFullOutline} from 'react-icons/ti/index'
+import { TiArrowBackOutline, TiHeartOutline, TiHeartFullOutline } from 'react-icons/ti/index'
+import { handleToggleTweet } from '../actions/tweets'
 
 export class Tweet extends Component {
+    // curtiu um tweet
     handleLike = (e) => {
         e.preventDefault()
-        // todo: Handle Like Tweet
+        const { dispatch, tweet, authedUser } = this.props
+
+        dispatch(handleToggleTweet({
+            id: tweet.id,
+            hasLiked: tweet.hasLiked,
+            authedUser
+        }))
     }
+    // visualizar tweet pai
     toParent = (e, id) => {
         e.preventDefault()
         // todo: Redirect to parent Tweet.
@@ -56,9 +65,9 @@ export class Tweet extends Component {
     }
 }
 
-// segundo argumento é um objeto que tem uma propriedade id 
+// o segundo argumento é um objeto que tem uma propriedade id 
 // com este valor passado pelo Dashboard
-function mapStateToProps({ authedUser, users, tweets }, { id }) {    
+function mapStateToProps({ authedUser, users, tweets }, { id }) {
     const tweet = tweets[id]
     const parentTweet = tweet ? tweets[tweet.replyingTo] : null
     return {
