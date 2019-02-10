@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { TWEET_TEXT_LIMIT } from '../utils/helpers'
 import { connect } from 'react-redux'
 import { handleAddTweet } from '../actions/tweets'
+import { Redirect } from 'react-router-dom'
 
 // componente controlado pelo react
 // armazenar o estado desse componente no redux ficaria mais complicado
@@ -9,12 +10,13 @@ import { handleAddTweet } from '../actions/tweets'
 class NewTweet extends Component {
     state = {
         text: '',
+        toHome: false
     }
     handleChange = (e) => {
         const text = e.target.value
 
         this.setState(() => ({
-            text
+            text            
         }))
     }
     handleSubmit = (e) => {
@@ -25,14 +27,17 @@ class NewTweet extends Component {
         dispatch(handleAddTweet(text, id))
 
         this.setState(() => ({
-            text: ''
+            text: '',
+            toHome: id ? false : true
         }))
     }
 
     render() {
-        const { text } = this.state
+        const { text, toHome } = this.state
 
-        {/* todo: Redirect to / if submitted */ }
+        if (toHome === true) {
+            return <Redirect to='/' />
+        }
 
         const tweetLeft = TWEET_TEXT_LIMIT - text.length
         return (
