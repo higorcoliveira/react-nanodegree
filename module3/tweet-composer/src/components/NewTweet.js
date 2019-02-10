@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { TWEET_TEXT_LIMIT } from '../utils/helpers'
+import { connect } from 'react-redux'
+import { handleAddTweet } from '../actions/tweets'
 
 // componente controlado pelo react
 // armazenar o estado desse componente no redux ficaria mais complicado
 // mais aconselhável usar o próprio gerenciamento de estado do react
-export class NewTweet extends Component {
+class NewTweet extends Component {
     state = {
         text: '',
     }
@@ -18,10 +20,9 @@ export class NewTweet extends Component {
     handleSubmit = (e) => {
         e.preventDefault()
         const { text } = this.state
-
-        // todo: Add Tweet to Store
-
-        console.log('New Tweet: ', text)
+        const { dispatch, id } = this.props
+        
+        dispatch(handleAddTweet(text, id))
 
         this.setState(() => ({
             text: ''
@@ -62,4 +63,4 @@ export class NewTweet extends Component {
     }
 }
 
-export default NewTweet
+export default connect()(NewTweet)
