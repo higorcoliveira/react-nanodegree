@@ -1,9 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 15344,
-  "expoServerNgrokUrl": "https://6h-6zf.anonymous.flexbox-examples.exp.direct",
-  "packagerNgrokUrl": "https://packager.6h-6zf.anonymous.flexbox-examples.exp.direct",
-  "ngrokPid": 15588
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
+  "webpackServerPort": null
 }
