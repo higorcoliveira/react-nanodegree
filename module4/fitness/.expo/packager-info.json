@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 8156,
+  "expoServerNgrokUrl": "https://5y-mjq.anonymous.fitness.exp.direct",
+  "packagerNgrokUrl": "https://packager.5y-mjq.anonymous.fitness.exp.direct",
+  "ngrokPid": 8204,
   "webpackServerPort": null
 }
