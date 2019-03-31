@@ -1,13 +1,12 @@
 import React from 'react'
 import { View, Platform, StatusBar } from 'react-native'
-import AddEntry from './components/AddEntry'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
-import History from './components/History'
 import Router from './components/Router'
 import { purple } from './utils/colors'
 import { Constants } from 'expo'
+import { setLocalNotification } from './utils/helpers'
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
   return (
@@ -18,9 +17,12 @@ function UdaciStatusBar ({backgroundColor, ...props}) {
 }
 
 export default class App extends React.Component {
+  componentDidMount() {
+    setLocalNotification()
+  }
 
   store = createStore(reducer)
-  render() {    
+  render() {
     return (
       <Provider store={this.store}>
         <View style={{flex: 1}}>
