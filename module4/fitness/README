@@ -1,0 +1,11 @@
+Para rodar o app (instalar o expo)
+- expo start
+
+Para gerar o .apk/.ipa
+
+- npm install -g exp
+- exp build:android 
+- exp build:ios
+
+Para verificar o status do build
+- exp build:status

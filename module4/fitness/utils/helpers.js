@@ -195,10 +195,15 @@ export function setLocalNotification () {
             if (status === 'granted') {
               Notifications.cancelAllScheduledNotificationsAsync()
 
+              let tomorrow = new Date()
+              tomorrow.setDate(tomorrow.getDate() + 1)
+              tomorrow.setHours(14)
+              tomorrow.setMinutes(19)
+
               Notifications.scheduleLocalNotificationAsync(
                 createNotification(),
                 {
-                  time: setNotificationDate(),
+                  time: tomorrow,
                   repeat: 'day',
                 }
               )
@@ -207,14 +212,4 @@ export function setLocalNotification () {
           })
       }
   })
-}
-
-// Alterar essa data para testar em "real time"
-function setNotificationDate() {
-  let tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  tomorrow.setHours(14)
-  tomorrow.setMinutes(10)
-
-  return tomorrow
 }
